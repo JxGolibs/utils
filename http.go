@@ -1,5 +1,30 @@
 package utils
 
+import (
+	"strconv"
+	"strings"
+)
+
+const (
+	// SchemeHTTPS the "https" url scheme.
+	SchemeHTTPS = "https"
+	// SchemeHTTP the "http" url scheme.
+	SchemeHTTP = "http"
+)
+
+func ResolvePort(addr string) int {
+	if portIdx := strings.IndexByte(addr, ':'); portIdx != -1 {
+		afP := addr[portIdx+1:]
+		p, err := strconv.Atoi(afP)
+		if err == nil {
+			return p
+		} else if afP == SchemeHTTPS { // it's not number, check if it's :https
+			return 443
+		}
+	}
+	return 80
+}
+
 // import (
 // 	"fmt"
 // 	"io/ioutil"
